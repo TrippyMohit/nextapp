@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Check if build failed
+      run: |
+        if [ $? -ne 0 ]; then
+          echo "Build failed. Exiting..."
+          exit 1
+        fi
+
+    - name: Deploy
+      if: success()
+      # Add your deployment steps here, such as deploying to a server or hosting platform
